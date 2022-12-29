@@ -39,6 +39,7 @@ struct Item {
 	RectangleShape sprite;
 	int delay;
 	int is_presented;		// 아이템이 떳는지?
+	long presented_time;
 };
 
 struct Textures {
@@ -64,6 +65,7 @@ int is_collide(RectangleShape obj1, RectangleShape obj2)
 // 전역변수
 const int ENEMY_NUM = 10;					// enemy의 최대개수
 const int BULLET_NUM = 50;					// bullet의 최대개수
+const int ITEM_NUM = 2;						// item의 최대종류
 const int W_WIDTH = 1200, W_HEIGHT = 600;	// 창의 크기
 const int GO_WIDTH = 320, GO_HEIGHT = 240;	// 게임오버 그림의 크기
 
@@ -165,11 +167,19 @@ int main(void)
 	}
 	
 	// item
-	struct Item item[2];
+	struct Item item[ITEM_NUM];
 	item[0].sprite.setTexture(&t.item_speed);
 	item[0].delay = 25000;	// 25초
-	item[0].sprite.setSize(Vector2f(50, 50));
-	item[0].is_presented = 1;
+	item[1].sprite.setTexture(&t.item_delay);
+	item[1].delay = 20000;
+	
+	for (int i = 0; i < ITEM_NUM; i++)
+	{
+		item[i].sprite.setSize(Vector2f(50, 50));
+		item[i].is_presented = 0;
+		item[i].presented_time = 0;
+	}
+	
 
 	// 윈도가 열려있을 때까지 반복
 	while (window.isOpen())
@@ -336,11 +346,24 @@ int main(void)
 			}
 		}
 
-		// item update
-		if (item[0].is_presented)
+		// item update TODO : item[1]이 안뜸
+		for (int i = 0; i < ITEM_NUM; i++)
 		{
-			// TODO : 충돌 시 아이템 효과를 주고 사라진다
+			if (!item[i].is_presented)
+			{
+				if (spent_time - item[i].presented_time > item[i].delay)
+				{
+					item[i].sprite.setPosition((rand() % W_WIDTH) * 0.8, (rand() % W_HEIGHT) * 0.8);
+					item[i].is_presented = 1;
+				}
+			}
+
+			if (item[i].is_presented)
+			{
+				// TODO : 충돌 시 아이템 효과를 주고 사라진다
+			}
 		}
+		
 		
 		sprintf(info, "life:%d score:%d time:%d"
 			, player.life, player.score, spent_time/1000);
