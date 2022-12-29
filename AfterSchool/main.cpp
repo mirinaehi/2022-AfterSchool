@@ -279,15 +279,18 @@ int main(void)
 		/* Enemy update */
 		for (int i = 0; i < ENEMY_NUM; i++)
 		{
-			// 10초마다 enemy가 젠
+			// 10초마다 enemy가 리스폰
 			if (spent_time % (1000*enemy_respawn_time) < 1000 / 60 + 1)
 			{
-				enemy[i].sprite.setSize(Vector2f(70, 70));
-				enemy[i].sprite.setFillColor(Color::Yellow);
-				enemy[i].sprite.setPosition(rand() % 300 + W_WIDTH * 0.9, rand() % 380);
-				enemy[i].life = 1;
-				// 10초마다 enemy의 속도+1
-				enemy[i].speed = -(rand() % 10 + 1 + (spent_time/1000/enemy_respawn_time));
+				// 게임이 진행중일 때만 적을 리스폰 시키겠다.
+				if (!is_gameover)
+				{
+					enemy[i].sprite.setSize(Vector2f(70, 70));
+					enemy[i].sprite.setPosition(rand() % 300 + W_WIDTH * 0.9, rand() % 380);
+					enemy[i].life = 1;
+					// 10초마다 enemy의 속도+1
+					enemy[i].speed = -(rand() % 10 + 1 + (spent_time / 1000 / enemy_respawn_time));
+				}
 			}
 
 			if (enemy[i].life > 0)
