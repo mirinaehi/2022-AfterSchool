@@ -230,22 +230,23 @@ int main(void)
 		
 
 		/* Bullet update */
-		// 총알 발사 TODO : 50번 이후부터는 안나가는 버그 수정할 것
+		// 총알 발사
 		printf("bullet_idx %d\n", bullet_idx);
 		if (Keyboard::isKeyPressed(Keyboard::Space))
 		{
+			// 장전시간 체크
 			if (spent_time-fired_time > bullet_delay)
 			{
-				// 총알이 발사되어있지 않다면
+				// 총알이 발사되어 있지 않다면
 				if (!bullet[bullet_idx].is_fired)
 				{
 					bullet[bullet_idx].sprite.setPosition(player.x + 50, player.y + 15);
 					bullet[bullet_idx].is_fired = 1;
 					bullet_idx++;	// 다음총알이 발사할 수 있도록
+					bullet_idx = bullet_idx % BULLET_NUM;
 					fired_time = spent_time;	// 총알 장전
 				}
 			}
-			
 		}
 		for (int i = 0; i < BULLET_NUM; i++)
 		{
