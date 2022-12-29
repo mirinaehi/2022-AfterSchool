@@ -141,6 +141,10 @@ int main(void)
 	// 윈도가 열려있을 때까지 반복
 	while (window.isOpen())
 	{
+		spent_time = clock() - start_time;
+		player.x = player.sprite.getPosition().x;
+		player.y = player.sprite.getPosition().y;
+
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -152,7 +156,7 @@ int main(void)
 				break;
 				// 키보드를 눌렀을 때(누른 순간만을 감지)
 			case Event::KeyPressed:
-			{
+				{
 				//// 스페이스 키 누르면 모든 enemy 다시 출현
 				//if (event.key.code == Keyboard::Space)
 				//{
@@ -166,16 +170,19 @@ int main(void)
 				//	}
 				//}
 				break;
-			}
+				}
 
 			}
 		}
 
-		spent_time = clock() - start_time;
-		player.x = player.sprite.getPosition().x;
-		player.y = player.sprite.getPosition().y;
+		
+		/* game상태 update */
+		if (player.life <= 0)
+		{
+			is_gameover = 1;
+		}
 
-
+		/* Player update */
 		// 방향키 start
 		if (Keyboard::isKeyPressed(Keyboard::Left))
 		{
@@ -194,6 +201,20 @@ int main(void)
 			player.sprite.move(0, player.speed);
 		}	// 방향키 end
 
+		// Player 이동범위 제한
+		// TODO : 오른쪽 아래쪽 제한을 의도대로 고치기
+		if (player.x < 0)
+			player.sprite.setPosition(0, player.y);
+		else if(player.x>W_WIDTH)
+			player.sprite.setPosition(W_WIDTH, player.y);
+
+		if (player.y < 0)
+			player.sprite.setPosition(player.x, 0);
+		else if (player.y > W_HEIGHT)
+			player.sprite.setPosition(player.x, W_HEIGHT);
+		printf("(%f, %f)\n", player.x, player.y);
+
+		/* Bullet update */
 		// 총알 발사
 		if (Keyboard::isKeyPressed(Keyboard::Space))
 		{
@@ -204,8 +225,14 @@ int main(void)
 				bullet.is_fired = 1;
 			}
 		}
+		if (bullet.is_fired)
+		{
+			bullet.sprite.move(bullet.speed, 0);
+			if (bullet.sprite.getPosition().x > W_WIDTH)
+				bullet.is_fired = 0;
+		}
 
-
+		/* Enemy update */
 		for (int i = 0; i < ENEMY_NUM; i++)
 		{
 			// 10초마다 enemy가 젠
@@ -258,20 +285,6 @@ int main(void)
 			}
 		}
 		
-
-		if (bullet.is_fired)
-		{
-			bullet.sprite.move(bullet.speed, 0);
-			if (bullet.sprite.getPosition().x > W_WIDTH)
-				bullet.is_fired = 0;
-		}
-
-		if (player.life <= 0)
-		{
-			is_gameover = 1;
-		}
-		
-
 		sprintf(info, "life:%d score:%d time:%d"
 			, player.life, player.score, spent_time/1000);
 		text.setString(info);
