@@ -39,10 +39,18 @@ struct Enemy {
 	int respawn_time;
 };
 
+struct Item {
+	RectangleShape sprite;
+	int delay;
+	int is_presented;		// 아이템이 떳는지?
+};
+
 struct Textures {
 	Texture bg;			// 배경 이미지
 	Texture enemy;		// 적 이미지
 	Texture gameover;	// 게임오버 이미지
+	Texture item_delay;	// 공속 아이템 이미지
+	Texture item_speed;	// 이속 아이템 이미지
 	Texture player;		// 플레이어 이미지
 };
 
@@ -65,6 +73,8 @@ int main(void)
 	t.bg.loadFromFile("./resources/images/background.jpg");
 	t.enemy.loadFromFile("./resources/images/enemy.png");
 	t.gameover.loadFromFile("./resources/images/gameover.png");
+	t.item_delay.loadFromFile("./resources/images/item_delay.png");
+	t.item_speed.loadFromFile("./resources/images/item_speed.png");
 	t.player.loadFromFile("./resources/images/player.png");
 
 
@@ -132,7 +142,6 @@ int main(void)
 		bullet[i].sprite.setPosition(player.x + 50, player.y + 15);		// 임시 테스트
 	}
 	
-
 	// 적(enemy)
 	struct Enemy enemy[ENEMY_NUM];
 	
@@ -154,6 +163,12 @@ int main(void)
 		enemy[i].speed = -(rand() % 10 + 1);
 	}
 	
+	// item
+	struct Item item[2];
+	item[0].sprite.setTexture(&t.item_speed);
+	item[0].delay = 25000;	// 25초
+	item[0].sprite.setSize(Vector2f(50, 50));
+	item[0].is_presented = 1;
 
 	// 윈도가 열려있을 때까지 반복
 	while (window.isOpen())
@@ -317,6 +332,12 @@ int main(void)
 				enemy[i].sprite.move(enemy[i].speed, 0);
 			}
 		}
+
+		// item update
+		if (item[0].is_presented)
+		{
+			// TODO : 충돌 시 아이템 효과를 주고 사라진다
+		}
 		
 		sprintf(info, "life:%d score:%d time:%d"
 			, player.life, player.score, spent_time/1000);
@@ -328,7 +349,10 @@ int main(void)
 		// draw는 나중에 호출할수록 우선순위가 높아짐
 		for(int i=0; i<ENEMY_NUM; i++)
 			if (enemy[i].life > 0)
-				window.draw(enemy[i].sprite); 
+				window.draw(enemy[i].sprite);
+		if (item[0].is_presented)
+			window.draw(item[0].sprite);
+
 		window.draw(player.sprite);
 		window.draw(text);
 		for(int i=0; i<BULLET_NUM; i++)
