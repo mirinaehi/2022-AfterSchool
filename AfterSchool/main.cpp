@@ -346,7 +346,7 @@ int main(void)
 			}
 		}
 
-		// item update TODO : item[1]¿Ã æ»∂‰
+
 		for (int i = 0; i < ITEM_NUM; i++)
 		{
 			if (!item[i].is_presented)
@@ -376,8 +376,9 @@ int main(void)
 		for(int i=0; i<ENEMY_NUM; i++)
 			if (enemy[i].life > 0)
 				window.draw(enemy[i].sprite);
-		if (item[0].is_presented)
-			window.draw(item[0].sprite);
+		for(int i=0; i<ITEM_NUM; i++)
+			if (item[i].is_presented)
+				window.draw(item[i].sprite);
 
 		window.draw(player.sprite);
 		window.draw(text);
