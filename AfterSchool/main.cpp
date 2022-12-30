@@ -45,6 +45,7 @@ struct Item {
 	RectangleShape sprite;
 	int delay;
 	int is_presented;		// 아이템이 떳는지?
+	Sound sound;
 	long presented_time;
 	enum item_type type;
 };
@@ -60,6 +61,8 @@ struct Textures {
 
 struct SButters {
 	SoundBuffer BGM;
+	SoundBuffer item_delay;
+	SoundBuffer item_speed;
 	SoundBuffer rumble;
 };
 
@@ -89,6 +92,8 @@ int main(void)
 
 	struct SButters sb;
 	sb.BGM.loadFromFile("./resources/sounds/BGM.ogg");
+	sb.item_delay.loadFromFile("./resources/sounds/item_delay.wav");
+	sb.item_speed.loadFromFile("./resources/sounds/item_speed.wav");
 	sb.rumble.loadFromFile("./resources/sounds/rumble.flac");
 
 	// 윈도창 생성
@@ -180,10 +185,13 @@ int main(void)
 	item[0].sprite.setTexture(&t.item_speed);
 	item[0].delay = 25000;	// 25초
 	item[0].type = SPEED;
+	item[0].sound.setBuffer(sb.item_speed);
 	item[1].sprite.setTexture(&t.item_delay);
 	item[1].delay = 20000;
 	item[1].type = DELAY;
-	
+	item[1].sound.setBuffer(sb.item_delay);
+	item[1].sound.setVolume(150);
+
 	for (int i = 0; i < ITEM_NUM; i++)
 	{
 		item[i].sprite.setSize(Vector2f(50, 50));
@@ -371,7 +379,7 @@ int main(void)
 
 			if (item[i].is_presented)
 			{
-				// 충돌 시 아이템 효과를 주고 사라진다
+				// 아이템 획득시 효과를 얻고 아이템이 사라진다
 				if (is_collide(player.sprite, item[i].sprite))
 				{
 					switch (item[i].type)
@@ -391,6 +399,7 @@ int main(void)
 					}
 					item[i].is_presented = 0;
 					item[i].presented_time = spent_time;
+					item[i].sound.play();
 				}
 			}
 		}
