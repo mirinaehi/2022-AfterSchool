@@ -13,6 +13,7 @@ const int CARD_H = 200;
 struct Card {
 	RectangleShape sprite;
 	int id;
+	int type;
 };
 
 int main(void)
@@ -22,6 +23,17 @@ int main(void)
 
 	Vector2i mouse_pos;
 	int click_cnt = 0;		// 마우스 누른 횟수
+
+	Texture t[8 + 1];
+	t[0].loadFromFile("./resources/images/ch0.png");
+	t[1].loadFromFile("./resources/images/ch1.png");
+	t[2].loadFromFile("./resources/images/ch2.png");
+	t[3].loadFromFile("./resources/images/ch3.png");
+	t[4].loadFromFile("./resources/images/ch4.png");
+	t[5].loadFromFile("./resources/images/ch5.png");
+	t[6].loadFromFile("./resources/images/ch6.png");
+	t[7].loadFromFile("./resources/images/ch7.png");
+	t[8].loadFromFile("./resources/images/ch8.png");
 
 	Font font;
 	font.loadFromFile("c:/Windows/Fonts/arial.ttf");
@@ -34,13 +46,17 @@ int main(void)
 	char info[40];
 	
 	struct Card cards[S][S];
+	int n = 0;
 	for (int i = 0; i < S; i++)
 	{
 		for (int j = 0; j < S; j++)
 		{
 			cards[i][j].sprite.setSize(Vector2f(CARD_W, CARD_H));
 			cards[i][j].sprite.setPosition(j * CARD_W, i * CARD_H);
-			cards[i][j].sprite.setFillColor(Color(i * 64, j * 64, 128));
+			cards[i][j].sprite.setTexture(&t[1+n/2]);
+			cards[i][j].type = 1 + n / 2;
+			cards[i][j].id = n+1;
+			n++;
 		}
 	}
 
