@@ -14,6 +14,7 @@ struct Card {
 	RectangleShape sprite;
 	int id;
 	int type;
+	int is_clicked;
 };
 
 int main(void)
@@ -41,7 +42,7 @@ int main(void)
 	Text text;
 	text.setFont(font);
 	text.setCharacterSize(30);
-	text.setFillColor(Color::White);
+	text.setFillColor(Color::Red);
 	text.setPosition(0, 0);
 	char info[40];
 	
@@ -53,9 +54,10 @@ int main(void)
 		{
 			cards[i][j].sprite.setSize(Vector2f(CARD_W, CARD_H));
 			cards[i][j].sprite.setPosition(j * CARD_W, i * CARD_H);
-			cards[i][j].sprite.setTexture(&t[1+n/2]);
+			cards[i][j].sprite.setTexture(&t[0]);
 			cards[i][j].type = 1 + n / 2;
 			cards[i][j].id = n+1;
+			cards[i][j].is_clicked = 0;
 			n++;
 		}
 	}
@@ -73,13 +75,36 @@ int main(void)
 				window.close();
 				break;
 				// 한 번 누르면 한 번만 적용
+				// TODO : 버튼 눌러도 적용 안되는 버그 해결하기
 			case Event::MouseButtonPressed:
 				if (event.mouseButton.button == Mouse::Left)
 				{
-					click_cnt++;
+					click_cnt++;		// 필요없는 코드
+					for (int i = 0; i < S; i++)
+					{
+						for (int j = 0; j < S; j++)
+						{
+							if (cards[i][j].sprite.getGlobalBounds().contains(mouse_pos.x, mouse_pos.y))
+								cards[i][j].is_clicked = 1;
+						}
+					}
 				}
 			}
 		}
+
+		for (int i = 0; i < S; i++)
+		{
+			for (int j = 0; j < S; j++)
+			{
+				// 클릭이 된 상태면
+				if (cards[i][j].is_clicked)
+				{
+					// 그림이 있는 스프라이트로 변경
+					cards[i][j].sprite.setTexture(&t[cards[i][j].type]);
+				}
+			}
+		}
+		system("cls");
 
 		sprintf(info, "(%d, %d) clicks %d\n"
 			, mouse_pos.x, mouse_pos.y, click_cnt);
