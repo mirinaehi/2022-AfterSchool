@@ -27,7 +27,7 @@ int main(void)
 	long start_time;
 	long spent_time;			// 게임진행 시각
 
-	const int GRAVITY = 10;		// 중력
+	const int GRAVITY = 5;		// 중력
 	const int PLATFORM_Y = 500;	// 땅바닥의 y좌표
 
 	Texture run[10];
@@ -50,7 +50,7 @@ int main(void)
 	player.sprite.setPosition(200, 200);
 	player.ani_delay = 1000 / player.frames / 2;		// 0.5초바다 걸음
 	player.speed = 5;
-	player.jump_speed = GRAVITY + 3;
+	player.jump_speed = GRAVITY * 2;					// 일정한 속도로 올라가고 내려감
 
 	start_time = clock();
 	player.ani_time = start_time;
@@ -73,6 +73,7 @@ int main(void)
 				{
 					// 점프
 					player.is_jumping = 1;
+					player.jumping_time = spent_time;
 				}
 				break;
 			default:
@@ -99,6 +100,12 @@ int main(void)
 			player.idx++;
 		}
 		
+		// 필요하다면 1000을 나중에 변수 처리할 것
+		if (spent_time - player.jumping_time > 1000)
+		{
+			player.is_jumping = 0;
+		}
+
 		player.sprite.move(0, GRAVITY);		// 중력이 작용한다
 		
 		if (player.is_jumping == 1)
