@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AfterSchool/resources/sounds/bgm.ogg
+/mp3/mp3.vcxproj.filters
+/mp3/mp3.vcxproj
