@@ -1,6 +1,13 @@
 # AfterSchool
 # 방과후 C프로젝트
 
+AfterSchool : 슈팅게임
+
+AfterSchool2 : 그림 맞추기
+
+mp3(출처) : https://github.com/SFML/SFML/wiki/Source%3A-MP3-Player
+
+
 리소스 출처
 
 images<br>

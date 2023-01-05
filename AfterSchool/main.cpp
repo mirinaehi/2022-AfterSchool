@@ -121,7 +121,7 @@ int main(void)
 	BGM_sound.setBuffer(sb.BGM);
 	BGM_sound.setVolume(55);
 	BGM_sound.setLoop(1);		// BGM 무한반복
-	BGM_sound.play();
+	//BGM_sound.play();
 
 	// text
 	Font font;
