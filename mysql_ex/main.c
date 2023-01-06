@@ -31,15 +31,25 @@ int main(void)
 	//else
 	//	printf("%s 실패\n", insert_q);
 	
-	// UPDATE
-	char update_q[100] = "UPDATE korea SET population=100000 WHERE city='TOKO'";
+	//// UPDATE
+	//char update_q[100] = "UPDATE korea SET population=100000 WHERE city='TOKO'";
+	//// Query 실행
+	//query_result = mysql_query(connection, update_q);
+
+	//if (query_result == 0)
+	//	printf("%s 성공\n", update_q);
+	//else
+	//	printf("%s 실패\n", update_q);
+
+	// DELETE
+	char delete_q[100] = "DELETE FROM korea WHERE city='TOKO'";
 	// Query 실행
-	query_result = mysql_query(connection, update_q);
+	query_result = mysql_query(connection, delete_q);
 
 	if (query_result == 0)
-		printf("%s 성공\n", update_q);
+		printf("%s 성공\n", delete_q);
 	else
-		printf("%s 실패\n", update_q);
+		printf("%s 실패\n", delete_q);
 	
 	mysql_close(&mysql);	// mysql 종료
 
