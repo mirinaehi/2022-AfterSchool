@@ -1,0 +1,65 @@
+status : 상태
+{
+	Current user, Current database 확인 (현재 상태)
+
+}
+
+show databases
+{
+	database 목록 확인
+}
+
+create database "DB명"
+{
+	"DB이름"의 데이터베이스 생성
+}
+
+use "DB이름"
+{
+	"DB이름" 데이터베이스 사용
+}
+
+show tables
+{
+	해당 DB안에 있는 테이블 목록을 보여줌
+}
+
+**sql 예약어는 되도록이면 대문자를 사용할 것**
+**문자열은 되도록이면 ''를 사용할 것**
+
+CREATE TABLE "테이블명" (
+	속성1이름 속성1의 자료형,
+	속성2이름 속성2의 자료형,
+	...
+);
+
+CREATE TABLE korea (
+  city VARCHAR(30),
+  population INT
+);
+ 
+desc "테이블명"
+{
+	테이블의 구조를 볼 수 있다.
+}
+
+CRUD 
+{	의미	SQL
+	create (INSERT)
+	Read   (SELECT)
+	Update (UPDATE)
+	Delete (DELETE)
+}
+
+SELECT * FROM korea;
+SELECT city, population FROM korea;
+
+INSERT INTO korea VALUES('SEOUL', 9428372);
+INSERT INTO korea VALUES('DAEJEON', 1446072);
+INSERT INTO korea VALUES('JEJU', 678159);
+INSERT INTO korea VALUES('TOKYO', 13960000);
+
+**비교연산자는 =임(==아님)**
+UPDATE korea SET population = 100000 WHERE city = 'TOKO';
+
+DELETE FROM korea WHERE city = 'TOKO';
