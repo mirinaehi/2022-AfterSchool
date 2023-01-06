@@ -21,17 +21,25 @@ int main(void)
 
 	
 	int query_result;
-	// INSERT
-	char insert_q[50] = "INSERT INTO korea VALUES('TOKO', 10000)";
+	//// INSERT
+	//char insert_q[50] = "INSERT INTO korea VALUES('TOKO', 10000)";
+	//// Query 실행
+	//query_result = mysql_query(connection, insert_q);
+
+	//if (query_result == 0)
+	//	printf("%s 성공\n", insert_q);
+	//else
+	//	printf("%s 실패\n", insert_q);
 	
+	// UPDATE
+	char update_q[100] = "UPDATE korea SET population=100000 WHERE city='TOKO'";
 	// Query 실행
-	query_result = mysql_query(connection, insert_q);
+	query_result = mysql_query(connection, update_q);
 
 	if (query_result == 0)
-		printf("%s 성공\n", insert_q);
+		printf("%s 성공\n", update_q);
 	else
-		printf("%s 실패\n", insert_q);
-	
+		printf("%s 실패\n", update_q);
 	
 	mysql_close(&mysql);	// mysql 종료
 
