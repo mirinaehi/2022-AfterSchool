@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mp3", "mp3\mp3.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mysql_ex", "mysql_ex\mysql_ex.vcxproj", "{0D5A78B6-DBF2-48C1-A716-9BAE08B2162B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgui_project", "imgui_project\imgui_project.vcxproj", "{C346B593-34A7-43F8-A7B6-D3316104138F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -67,6 +69,14 @@ Global
 		{0D5A78B6-DBF2-48C1-A716-9BAE08B2162B}.Release|x64.Build.0 = Release|x64
 		{0D5A78B6-DBF2-48C1-A716-9BAE08B2162B}.Release|x86.ActiveCfg = Release|Win32
 		{0D5A78B6-DBF2-48C1-A716-9BAE08B2162B}.Release|x86.Build.0 = Release|Win32
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Debug|x64.ActiveCfg = Debug|x64
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Debug|x64.Build.0 = Debug|x64
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Debug|x86.ActiveCfg = Debug|Win32
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Debug|x86.Build.0 = Debug|Win32
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Release|x64.ActiveCfg = Release|x64
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Release|x64.Build.0 = Release|x64
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Release|x86.ActiveCfg = Release|Win32
+		{C346B593-34A7-43F8-A7B6-D3316104138F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
