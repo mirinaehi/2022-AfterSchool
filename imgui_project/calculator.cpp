@@ -17,7 +17,7 @@ void Calculate();
 int main()
 {
     // SFML 윈도우 생성
-    sf::RenderWindow window(sf::VideoMode(400, 600), "ImGui + SFML Calculator");
+    sf::RenderWindow window(sf::VideoMode(600, 800), "ImGui + SFML Calculator");
     window.setFramerateLimit(60);  // 프레임 제한 설정
 
     // ImGui-SFML 초기화
@@ -59,6 +59,7 @@ int main()
 
 void RenderCalculator()
 {
+
     // 계산기 창 설정 및 시작
     ImGui::Begin("Calculator", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -73,7 +74,7 @@ void RenderCalculator()
         "7", "8", "9", "/",
         "4", "5", "6", "*",
         "1", "2", "3", "-",
-        "0", "C", "=", "+"
+        "0", "C", "=", "+"                                                                                                                                                                                          
     };
 
     // 4x4 버튼 배열 생성
@@ -84,7 +85,7 @@ void RenderCalculator()
             int index = i * 4 + j;  // 2차원 인덱스를 1차원 배열 인덱스로 변환
 
             // 각 버튼에 대한 동작 정의
-            if (ImGui::Button(buttons[index], ImVec2(50, 50)))
+            if (ImGui::Button(buttons[index], ImVec2(70, 70)))
             {
                 char buttonValue = buttons[index][0];
 
