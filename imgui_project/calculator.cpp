@@ -32,6 +32,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
+            // SFML의 이벤트 시스템을 통해 전달된 이벤트를 ImGui가 처리하도록 중계
             ImGui::SFML::ProcessEvent(event);
 
             if (event.type == sf::Event::Closed)
@@ -61,8 +62,8 @@ void RenderCalculator()
     // 계산기 창 설정 및 시작
     ImGui::Begin("Calculator", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-    ImGui::Text("Calculator");
-    ImGui::Separator();  // 구분선
+    //ImGui::Text("Calculator");
+    //ImGui::Separator();  // 구분선
 
     // 현재 계산기의 디스플레이 값 표시
     ImGui::Text(displayValue.c_str());
