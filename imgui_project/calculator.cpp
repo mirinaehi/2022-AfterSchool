@@ -12,6 +12,7 @@ bool newInput = true;  // 새로운 입력 여부
 // 함수 프로토타입
 void RenderCalculator();
 void Calculate();
+void HandleInput(char buttonValue);
 
 int main() {
     // SFML 윈도우 생성
@@ -67,6 +68,44 @@ int main() {
     return 0;
 }
 
+void HandleInput(char buttonValue) {
+    if (isdigit(buttonValue)) {
+        if (newInput) {
+            displayValue = buttonValue;
+            newInput = false;
+        }
+        else {
+            displayValue += buttonValue;
+        }
+    }
+    else {
+        switch (buttonValue) {
+        case 'C':
+            displayValue = "0";
+            num1 = num2 = result = 0.0f;
+            operation = 0;
+            newInput = true;
+            break;
+        case '=':
+            if (operation != 0) {
+                num2 = std::stof(displayValue);
+                Calculate();
+                displayValue = std::to_string(result);
+                operation = 0;
+                newInput = true;
+            }
+            break;
+        default:
+            if (operation == 0) {
+                num1 = std::stof(displayValue);
+                operation = buttonValue;
+                newInput = true;
+            }
+            break;
+        }
+    }
+}
+
 void RenderCalculator() {
     ImGui::Begin("Calculator", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
@@ -87,43 +126,7 @@ void RenderCalculator() {
 
             // 각 버튼에 대한 동작 정의
             if (ImGui::Button(buttons[index], ImVec2(80, 80))) {
-                char buttonValue = buttons[index][0];
-
-                if (isdigit(buttonValue)) {
-                    if (newInput) {
-                        displayValue = buttonValue;
-                        newInput = false;
-                    }
-                    else {
-                        displayValue += buttonValue;
-                    }
-                }
-                else {
-                    switch (buttonValue) {
-                    case 'C':
-                        displayValue = "0";
-                        num1 = num2 = result = 0.0f;
-                        operation = 0;
-                        newInput = true;
-                        break;
-                    case '=':
-                        if (operation != 0) {
-                            num2 = std::stof(displayValue);
-                            Calculate();
-                            displayValue = std::to_string(result);
-                            operation = 0;
-                            newInput = true;
-                        }
-                        break;
-                    default:
-                        if (operation == 0) {
-                            num1 = std::stof(displayValue);
-                            operation = buttonValue;
-                            newInput = true;
-                        }
-                        break;
-                    }
-                }
+                HandleInput(buttons[index][0]);
             }
             if (j < 3) ImGui::SameLine();  // 버튼을 같은 줄에 이어서 표시
         }
