@@ -50,6 +50,39 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();  // 윈도우가 닫히면 프로그램 종료
             }
+
+            if (event.type == sf::Event::KeyPressed) {
+                switch (event.key.code) {
+                case sf::Keyboard::Num0: 
+                case sf::Keyboard::Numpad0: HandleInput('0'); break;
+                case sf::Keyboard::Num1:
+                case sf::Keyboard::Numpad1: HandleInput('1'); break;
+                case sf::Keyboard::Num2:
+                case sf::Keyboard::Numpad2: HandleInput('2'); break;
+                case sf::Keyboard::Num3:
+                case sf::Keyboard::Numpad3: HandleInput('3'); break;
+                case sf::Keyboard::Num4:
+                case sf::Keyboard::Numpad4: HandleInput('4'); break;
+                case sf::Keyboard::Num5:
+                case sf::Keyboard::Numpad5: HandleInput('5'); break;
+                case sf::Keyboard::Num6:
+                case sf::Keyboard::Numpad6: HandleInput('6'); break;
+                case sf::Keyboard::Num7:
+                case sf::Keyboard::Numpad7: HandleInput('7'); break;
+                case sf::Keyboard::Num8:
+                case sf::Keyboard::Numpad8: HandleInput('8'); break;
+                case sf::Keyboard::Num9:
+                case sf::Keyboard::Numpad9: HandleInput('9'); break;
+                case sf::Keyboard::Slash: HandleInput('/'); break;
+                case sf::Keyboard::Multiply: HandleInput('*'); break;
+                case sf::Keyboard::Subtract: HandleInput('-'); break;
+                case sf::Keyboard::Add: HandleInput('+'); break;
+                case sf::Keyboard::Enter: HandleInput('='); break;
+                case sf::Keyboard::Escape: HandleInput('C'); break;
+                default: break;
+                }
+            }
+
         }
 
         ImGui::SFML::Update(window, deltaClock.restart());
