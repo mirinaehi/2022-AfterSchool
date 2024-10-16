@@ -38,6 +38,14 @@ int main() {
     fontTexture.update(pixels);
     io.Fonts->TexID = reinterpret_cast<void*>(fontTexture.getNativeHandle());
 
+    // Load background texture
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("background.png")) {
+        return -1;  // 이미지 로드 실패 시 종료
+    }
+    sf::Sprite backgroundSprite(backgroundTexture);
+
+
     // SFML에서 시간 관리를 위한 클록(clock)
     sf::Clock deltaClock;
 
@@ -87,11 +95,14 @@ int main() {
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        // 계산기 UI 렌더링
+        // 1. 그리기 시작 (배경)
+        window.clear();
+        window.draw(backgroundSprite);
+
+        // 2. IMGUI 요소 그리기
         RenderCalculator();
 
-        // 렌더링 코드
-        window.clear(sf::Color(30, 30, 30));  // 배경 색상 설정
+        // 3. 그린 모든 것 화면에 표시
         ImGui::SFML::Render(window);
         window.display();
     }

@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# imgui
+imgui.ini
+
 # User-specific files
 *.rsuser
 *.suo
@@ -365,3 +368,4 @@ FodyWeavers.xsd
 
 
 /mysql_ex/db_config.h
+/imgui_project/imgui.ini
