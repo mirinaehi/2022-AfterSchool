@@ -108,8 +108,12 @@ void CalculatorGUI::HandleKeyPress(sf::Keyboard::Key key) {
 void CalculatorGUI::RenderCalculator() {
     ImGui::Begin("Calculator", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 
-    // 현재 계산기의 디스플레이 값 표시
-    ImGui::Text(logic.GetDisplayValue().c_str());
+    // 디스플레이 값의 오른쪽 정렬
+    float calculatorWidth = ImGui::GetWindowContentRegionWidth(); // 계산기 창의 너비
+    float textWidth = ImGui::CalcTextSize(logic.GetDisplayValue().c_str()).x; // 텍스트의 너비 계산
+
+    ImGui::SetCursorPosX(calculatorWidth - textWidth); // 오른쪽으로 정렬
+    ImGui::TextUnformatted(logic.GetDisplayValue().c_str()); // 값 출력
 
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
@@ -143,3 +147,4 @@ void CalculatorGUI::RenderCalculator() {
 
     ImGui::End();
 }
+
