@@ -1,4 +1,5 @@
 ﻿#include "CalculatorLogic.h"
+#include <cmath>
 
 const std::string& CalculatorLogic::GetDisplayValue() const {
     return displayValue;
@@ -23,7 +24,13 @@ void CalculatorLogic::HandleInput(char buttonValue) {
             if (operation != 0) {
                 num2 = std::stof(displayValue);
                 Calculate();
-                displayValue = std::to_string(result);
+                // 정수 부분은 소수점이 없도록 출력
+                if (std::fmod(result, 1.0) == 0.0) {
+                    displayValue = std::to_string(static_cast<int>(result));
+                }
+                else {
+                    displayValue = std::to_string(result);
+                }
                 operation = 0;
                 newInput = true;
             }
