@@ -14,22 +14,22 @@ struct Post {
 // 게시판 클래스를 정의합니다.
 class BulletinBoard {
 public:
-    // 게시물을 추가하는 메서드입니다.
     void addPost(const std::wstring& title, const std::wstring& author, int views, const std::wstring& date) {
         posts.push_back({ title, author, views, date });
     }
 
-    // 게시물을 그리는 메서드입니다.
+    // 게시물과 테이블을 그리는 메서드입니다.
     void draw(sf::RenderWindow& window, sf::Font& font) {
-        drawHeader(window, font);  // 헤더 그리기
+        drawHeader(window, font);
 
         const int startingY = 50;  // 처음 시작 Y 좌표
-        const int lineHeight = 30; // 각 텍스트 줄의 높이
+        const int lineHeight = 40; // 각 텍스트 줄의 높이
 
         // 모든 게시물을 순회하면서 그립니다.
         for (size_t i = 0; i < posts.size(); ++i) {
             float rowY = startingY + i * lineHeight;
             drawPost(window, font, posts[i], rowY);
+            drawSeparatorLine(window, rowY + 35);  // 35로 조정하여 텍스트와의 간격 좁힘
         }
     }
 
@@ -78,6 +78,13 @@ private:
         window.draw(author);
         window.draw(views);
         window.draw(date);
+    }
+
+    void drawSeparatorLine(sf::RenderWindow& window, float y) {
+        sf::RectangleShape line(sf::Vector2f(window.getSize().x - 50, 1));
+        line.setFillColor(sf::Color(200, 200, 200));  // 회색 분리선
+        line.setPosition(50, y);
+        window.draw(line);
     }
 
     std::vector<Post> posts;  // 게시물 리스트 저장
