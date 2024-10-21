@@ -3,35 +3,89 @@
 #include <vector>
 #include <string>
 
+// 게시물을 저장할 구조체 정의
+struct Post {
+    std::wstring title;
+    std::wstring author;
+    int views;
+    std::wstring date;
+};
+
 // 게시판 클래스를 정의합니다.
 class BulletinBoard {
 public:
     // 게시물을 추가하는 메서드입니다.
-    void addPost(const std::wstring& post) {
-        posts.push_back(post);  // 게시물 목록에 새로운 게시물을 추가합니다.
+    void addPost(const std::wstring& title, const std::wstring& author, int views, const std::wstring& date) {
+        posts.push_back({ title, author, views, date });
     }
 
     // 게시물을 그리는 메서드입니다.
     void draw(sf::RenderWindow& window, sf::Font& font) {
+        drawHeader(window, font);  // 헤더 그리기
+
         const int startingY = 50;  // 처음 시작 Y 좌표
         const int lineHeight = 30; // 각 텍스트 줄의 높이
 
         // 모든 게시물을 순회하면서 그립니다.
         for (size_t i = 0; i < posts.size(); ++i) {
-            sf::Text text(posts[i], font, 20);  // 텍스트를 생성하고 설정합니다.
-            text.setPosition(50, startingY + i * lineHeight);  // 텍스트 위치 설정
-            text.setFillColor(sf::Color::Black);  // 텍스트 색상을 검정으로 설정
-            window.draw(text);  // 텍스트를 윈도우에 그립니다.
+            float rowY = startingY + i * lineHeight;
+            drawPost(window, font, posts[i], rowY);
         }
     }
 
 private:
-    std::vector<std::wstring> posts;  // 게시물을 저장할 벡터입니다.
+    void drawHeader(sf::RenderWindow& window, sf::Font& font) {
+        sf::Text title(L"제목", font, 20);
+        title.setPosition(50, 10);
+        title.setFillColor(sf::Color::Black);
+
+        sf::Text author(L"글쓴이", font, 20);
+        author.setPosition(300, 10);
+        author.setFillColor(sf::Color::Black);
+
+        sf::Text views(L"조회수", font, 20);
+        views.setPosition(500, 10);
+        views.setFillColor(sf::Color::Black);
+
+        sf::Text date(L"작성일", font, 20);
+        date.setPosition(650, 10);
+        date.setFillColor(sf::Color::Black);
+
+        window.draw(title);
+        window.draw(author);
+        window.draw(views);
+        window.draw(date);
+    }
+
+    void drawPost(sf::RenderWindow& window, sf::Font& font, const Post& post, float y) {
+        sf::Text title(post.title, font, 20);
+        title.setPosition(50, y);
+        title.setFillColor(sf::Color::Blue);
+
+        sf::Text author(post.author, font, 20);
+        author.setPosition(300, y);
+        author.setFillColor(sf::Color::Black);
+
+        sf::Text views(std::to_wstring(post.views), font, 20);
+        views.setPosition(500, y);
+        views.setFillColor(sf::Color::Black);
+
+        sf::Text date(post.date, font, 20);
+        date.setPosition(650, y);
+        date.setFillColor(sf::Color::Black);
+
+        window.draw(title);
+        window.draw(author);
+        window.draw(views);
+        window.draw(date);
+    }
+
+    std::vector<Post> posts;  // 게시물 리스트 저장
 };
 
 int main() {
     // SFML 윈도우 생성
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Bulletin Board");
+    sf::RenderWindow window(sf::VideoMode(800, 600), L"게시판");
     window.setFramerateLimit(60);  // 프레임 속도 제한
 
     // 폰트 로드
@@ -44,7 +98,12 @@ int main() {
     BulletinBoard board;  // 게시판 객체 생성
     std::wstring currentInput;  // 현재 사용자 입력을 저장할 문자열
     bool isEnteringText = false;  // 텍스트 입력 모드 여부
-    bool skipFirstChar = false; // 첫 입력 문자('e') 무시 여부
+    bool skipFirstChar = false;   // 첫 입력 문자('e') 무시 여부
+
+    // 예시 게시물 추가
+    board.addPost(L"제목 예시1", L"작성자1", 123, L"2023-09-15");
+    board.addPost(L"제목 예시2", L"작성자2", 45, L"2023-09-16");
+    board.addPost(L"제목 예시3", L"작성자3", 67, L"2023-09-17");
 
     while (window.isOpen()) {
         sf::Event event;
@@ -62,14 +121,14 @@ int main() {
                     currentInput.pop_back();
                 }
                 else {
-                    // 유니코드 처리를 통해서, 한글 처리가 가능하게 설정
+                    // 유니코드 처리를 통해서, 문자를 문자열에 추가
                     currentInput += static_cast<wchar_t>(event.text.unicode);
                 }
             }
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Enter && isEnteringText) {
                     // 사용자가 엔터 키를 눌렀을 때 게시물 추가
-                    board.addPost(currentInput);
+                    board.addPost(currentInput, L"새 작성자", 0, L"2023-09-18");
                     currentInput.clear();  // 현재 입력 초기화
                     isEnteringText = false;  // 텍스트 입력 모드 종료
                 }
