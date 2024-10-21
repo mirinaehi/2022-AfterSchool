@@ -36,7 +36,7 @@ int main() {
 
     // 폰트 로드
     sf::Font font;
-    if (!font.loadFromFile("HANBatang.ttf")) {
+    if (!font.loadFromFile("HANBatang.ttf")) {  // 한글 폰트 경로 설정
         std::cerr << "Error loading font\n";  // 폰트 로드 실패 시 오류 메시지 출력
         return -1;  // 프로그램 종료
     }
@@ -56,8 +56,8 @@ int main() {
                     // 백스페이스 처리 (마지막 문자 삭제)
                     currentInput.pop_back();
                 }
-                else if (event.text.unicode < 128 && event.text.unicode != '\b') {
-                    // 입력 문자를 문자열에 추가
+                else {
+                    // 유니코드 처리를 통해서, 한글 처리가 가능하게 설정
                     currentInput += static_cast<wchar_t>(event.text.unicode);
                 }
             }
@@ -79,7 +79,7 @@ int main() {
 
         // 현재 입력한 텍스트를 화면에 출력
         if (isEnteringText) {
-            sf::Text inputText( L"> " + currentInput, font, 20);
+            sf::Text inputText(L"> " + currentInput, font, 20);
             inputText.setPosition(50, 20);  // 텍스트 위치 설정
             inputText.setFillColor(sf::Color::Black);  // 텍스트 색상 설정
             window.draw(inputText);  // 텍스트를 그립니다.
