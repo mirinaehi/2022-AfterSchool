@@ -4,7 +4,6 @@
 #include <string>
 #include <limits>
 
-// 게시물을 저장할 구조체 정의
 struct Post {
     std::wstring title;
     std::wstring author;
@@ -13,15 +12,13 @@ struct Post {
     std::wstring date;
 };
 
-// 게시판 클래스를 정의합니다.
 class BulletinBoard {
 public:
     void addPost(const std::wstring& title, const std::wstring& author, const std::wstring& content, int views, const std::wstring& date) {
         posts.push_back({ title, author, content, views, date });
     }
 
-    // 게시물과 테이블을 그리는 메서드입니다.
-    void draw(sf::RenderWindow& window, sf::Font& font, size_t& selectedPostIndex) const {
+    void drawList(sf::RenderWindow& window, sf::Font& font, size_t& selectedPostIndex) const {
         drawHeader(window, font);
 
         const int startingY = 50;
@@ -30,11 +27,33 @@ public:
         for (size_t i = 0; i < posts.size(); ++i) {
             float rowY = startingY + i * lineHeight;
             drawPost(window, font, posts[i], rowY, selectedPostIndex == i);
-
-            if (selectedPostIndex == i) {
-                drawContent(window, font, posts[i].content, rowY + 35);
-            }
         }
+    }
+
+    void drawContent(sf::RenderWindow& window, sf::Font& font, size_t postIndex) const {
+        if (postIndex >= posts.size()) return;
+
+        const Post& post = posts[postIndex];
+        sf::Text title(post.title, font, 30);
+        title.setPosition(50, 50);
+        title.setFillColor(sf::Color::Black);
+        window.draw(title);
+
+        sf::Text content(post.content, font, 20);
+        content.setPosition(50, 100);
+        content.setFillColor(sf::Color::Black);
+        window.draw(content);
+
+        // "뒤로가기" 버튼 그리기
+        sf::RectangleShape backRect(sf::Vector2f(150, 30));
+        backRect.setPosition(50, 500);
+        backRect.setFillColor(sf::Color(220, 220, 220));
+        window.draw(backRect);
+
+        sf::Text backButton(L"뒤로가기", font, 20);
+        backButton.setPosition(60, 505);
+        backButton.setFillColor(sf::Color::Black);
+        window.draw(backButton);
     }
 
     size_t getPostCount() const {
@@ -87,14 +106,7 @@ private:
         window.draw(date);
     }
 
-    void drawContent(sf::RenderWindow& window, sf::Font& font, const std::wstring& content, float y) const {
-        sf::Text contentText(content, font, 20);
-        contentText.setPosition(50, y);
-        contentText.setFillColor(sf::Color::Black);
-        window.draw(contentText);
-    }
-
-    std::vector<Post> posts;  // 게시물 리스트 저장
+    std::vector<Post> posts;
 };
 
 int main() {
@@ -112,6 +124,7 @@ int main() {
     bool isEnteringText = false;
     bool skipFirstChar = false;
     size_t selectedPostIndex = std::numeric_limits<size_t>::max(); // 선택된 게시물
+    bool viewingContent = false;
 
     // 예시 게시물 추가
     board.addPost(L"제목 예시1", L"작성자1", L"첫 번째 게시물 내용입니다.", 123, L"2023-09-15");
@@ -124,21 +137,39 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                float yMouse = static_cast<float>(event.mouseButton.y);
-                float rowHeight = 40.0f;  // 줄 높이
-                float startingY = 50.0f;  // 시작 Y 좌표
-                for (size_t i = 0; i < board.getPostCount(); ++i) {
-                    if (yMouse > startingY + i * rowHeight && yMouse < startingY + (i + 1) * rowHeight) {
-                        selectedPostIndex = i;  // 선택된 게시물 활성화
-                        break;
+
+            if (viewingContent) {
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    if (event.mouseButton.x >= 50 && event.mouseButton.x <= 200 && event.mouseButton.y >= 500 && event.mouseButton.y <= 530) {
+                        viewingContent = false;
+                    }
+                }
+            }
+            else {
+                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                    float yMouse = static_cast<float>(event.mouseButton.y);
+                    float rowHeight = 40.0f;
+                    float startingY = 50.0f;
+                    for (size_t i = 0; i < board.getPostCount(); ++i) {
+                        if (yMouse > startingY + i * rowHeight && yMouse < startingY + (i + 1) * rowHeight) {
+                            selectedPostIndex = i;
+                            viewingContent = true;  // 클릭 시 내용 보기로 전환
+                            break;
+                        }
                     }
                 }
             }
         }
 
         window.clear(sf::Color::White);
-        board.draw(window, font, selectedPostIndex);
+
+        if (viewingContent) {
+            board.drawContent(window, font, selectedPostIndex);
+        }
+        else {
+            board.drawList(window, font, selectedPostIndex);
+        }
+
         window.display();
     }
 
