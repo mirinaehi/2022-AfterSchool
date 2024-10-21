@@ -44,6 +44,7 @@ int main() {
     BulletinBoard board;  // 게시판 객체 생성
     std::wstring currentInput;  // 현재 사용자 입력을 저장할 문자열
     bool isEnteringText = false;  // 텍스트 입력 모드 여부
+    bool skipFirstChar = false; // 첫 입력 문자('e') 무시 여부
 
     while (window.isOpen()) {
         sf::Event event;
@@ -52,6 +53,10 @@ int main() {
                 window.close();  // 윈도우가 닫히면 프로그램 종료
             }
             if (event.type == sf::Event::TextEntered && isEnteringText) {
+                if (skipFirstChar) {
+                    skipFirstChar = false;  // 첫 글자는 무시하고 나머지는 저장
+                    continue;
+                }
                 if (event.text.unicode == '\b' && !currentInput.empty()) {
                     // 백스페이스 처리 (마지막 문자 삭제)
                     currentInput.pop_back();
@@ -71,6 +76,7 @@ int main() {
                 if (event.key.code == sf::Keyboard::E) {
                     // E 키를 눌러 텍스트 입력 모드 시작
                     isEnteringText = true;
+                    skipFirstChar = true;  // 첫번째 입력 무시
                 }
             }
         }
