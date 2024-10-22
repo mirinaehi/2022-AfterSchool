@@ -9,11 +9,11 @@ class Player {
 public:
     sf::RectangleShape shape; // 플레이어의 모양
     float speed;              // 이동 속도
-    bool is_jumping;         // 점프 중인지 여부
-    bool is_on_ground;       // 플랫폼 위에 있는지 여부
-    float jump_height;       // 점프 높이
-    float gravity;           // 중력의 힘
-    float velocity_y;        // Y축 속도
+    bool is_jumping;          // 점프 중인지 여부
+    bool is_on_ground;        // 플랫폼 위에 있는지 여부
+    float jump_height;        // 점프 높이
+    float gravity;            // 중력의 힘
+    float velocity_y;         // Y축 속도
 
     // 플레이어의 속성을 초기화하는 생성자
     Player() {
@@ -28,7 +28,7 @@ public:
         velocity_y = 0.0f; // Y축 속도 초기화
     }
 
-    // 중력을 기반으로 플레이어의 위치를 업데이트
+    // 중력을 기반으로 플레이어를 업데이트
     void Update() {
         // 중력을 적용
         if (!is_on_ground) {
@@ -38,7 +38,7 @@ public:
         shape.move(0, velocity_y); // Y축으로 플레이어 이동
 
         // 바닥에 닿았는지 확인
-        if (shape.getPosition().y >= 400) { // 바닥 Y 좌표
+        if (IsBottom()) { // 바닥 Y 좌표
             shape.setPosition(shape.getPosition().x, 400); // Y 위치를 바닥으로 설정
             velocity_y = 0; // Y축 속도 초기화
             is_on_ground = true; // 바닥에 있음
@@ -48,7 +48,7 @@ public:
 
     // 주어진 방향으로 플레이어를 이동
     void Move(int direction) {
-        shape.move(direction * speed, 0); // X축으로 플레이어 이동
+        shape.move(direction * speed, 0); // X축으로 이동
     }
 
     // 플레이어를 점프시키기
@@ -59,8 +59,13 @@ public:
             is_on_ground = false; // 점프 중이라 바닥에 없게 설정
         }
     }
+
+    bool IsBottom() {
+        return shape.getPosition().y >= 400 ? true : false;
+    }
 };
 
+// 게임을 실행하는 메인 함수
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Super Mario Jump Simulation"); // 윈도우 생성
     window.setFramerateLimit(60); // 프레임 속도 설정
@@ -102,10 +107,10 @@ int main() {
 
         // 플레이어 입력 처리
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            player.Move(-1); // 왼쪽 이동
+            player.Move(-1); // 왼쪽으로 이동
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            player.Move(1); // 오른쪽 이동
+            player.Move(1); // 오른쪽으로 이동
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             player.Jump(); // 점프
@@ -116,10 +121,18 @@ int main() {
 
         // 플랫폼과의 충돌 확인
         if (player.shape.getGlobalBounds().intersects(platform.getGlobalBounds())) {
-            player.shape.setPosition(player.shape.getPosition().x, platform.getPosition().y - player.shape.getSize().y);
-            player.velocity_y = 0; // 충돌 시 Y축 속도 초기화
-            player.is_on_ground = true; // 플레이어가 플랫폼 위에 있음을 설정
+            // 플랫폼 위에 있을 때만 떨어지도록
+            if (player.velocity_y > 0) { // 아래로 떨어질 때만
+                player.shape.setPosition(player.shape.getPosition().x, platform.getPosition().y - player.shape.getSize().y);
+                player.velocity_y = 0; // Y축 속도 초기화
+                player.is_on_ground = true; // 플레이어가 플랫폼 위에 있음을 설정
+            }
         }
+        else {
+            if(!player.IsBottom())
+                player.is_on_ground = false;
+        }
+        
 
         // Y좌표 텍스트 업데이트
         y_text.setString("Y: " + std::to_string(static_cast<int>(player.shape.getPosition().y)));
