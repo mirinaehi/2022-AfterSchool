@@ -169,7 +169,10 @@ int main() {
                 window.close();
             }
 
+            bool isHovered = false;  // 호버 상태 추적
             if (viewingContent) {
+                isHovered = false;
+                window.setMouseCursor(arrow_cursor);
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (event.mouseButton.x >= 50 && event.mouseButton.x <= 200 &&
                         event.mouseButton.y >= 500 && event.mouseButton.y <= 530) {
@@ -182,7 +185,7 @@ int main() {
                     float yMouse = static_cast<float>(event.mouseMove.y);
                     float rowHeight = 40.0f;
                     float startingY = 50.0f;
-                    bool isHovered = false;  // 호버 상태 추적
+                    isHovered = false;
 
                     for (size_t i = 0; i < board.getPostCount(); ++i) {
                         if (yMouse > startingY + i * rowHeight && yMouse < startingY + (i + 1) * rowHeight) {
