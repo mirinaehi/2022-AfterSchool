@@ -15,6 +15,16 @@ struct Post {
     bool is_selected = false; // 게시물이 선택되었는지 여부
 };
 
+enum PostSeq {
+    kTitle = 0,
+    kAuthor,
+    kContent,
+    kWiews,
+    kDate,
+    kIsSelected,
+    kCount
+};
+
 // 게시판 클래스를 정의합니다.
 class BulletinBoard {
 public:
