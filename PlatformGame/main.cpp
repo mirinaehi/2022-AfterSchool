@@ -26,15 +26,20 @@ public:
 
     // 중력을 기반으로 플레이어의 위치를 업데이트
     void Update() {
-        if (shape.getPosition().y <= 300) {
+        // 속도를 중력만큼 증가시킴
+        if (is_jumping) {
             velocity_y += gravity; // 중력을 속도에 적용
-            is_jumping = true; // 점프 상태 설정
         }
-        else {
-            velocity_y = 0; // 바닥에 떨어지면 속도 초기화
-            is_jumping = false; // 점프 상태 초기화
-        }
+
         shape.move(0, velocity_y); // Y축으로 플레이어 이동
+
+        // 바닥에 닿았는지 확인
+        if (shape.getPosition().y >= 300) {
+            // 바닥에 닿으면 Y 위치를 300으로 설정하고 속도 초기화
+            shape.setPosition(shape.getPosition().x, 300);
+            velocity_y = 0; // Y축 속도 초기화
+            is_jumping = false; // 점프 상태를 변환
+        }
     }
 
     // 주어진 방향으로 플레이어를 이동
@@ -46,6 +51,7 @@ public:
     void Jump() {
         if (!is_jumping) { // 점프 중이 아닐 때만 점프
             velocity_y = -jump_height; // 점프를 위한 Y축 속도를 설정
+            is_jumping = true; // 점프 상태를 true로 변경
         }
     }
 };
