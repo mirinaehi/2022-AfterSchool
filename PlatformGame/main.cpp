@@ -38,7 +38,7 @@ public:
         shape.move(0, velocity_y); // Y축으로 플레이어 이동
 
         // 바닥에 닿았는지 확인
-        if (IsBottom()) { // 바닥 Y 좌표
+        if (shape.getPosition().y >= 400) { // 바닥 Y 좌표
             shape.setPosition(shape.getPosition().x, 400); // Y 위치를 바닥으로 설정
             velocity_y = 0; // Y축 속도 초기화
             is_on_ground = true; // 바닥에 있음
@@ -59,13 +59,8 @@ public:
             is_on_ground = false; // 점프 중이라 바닥에 없게 설정
         }
     }
-
-    bool IsBottom() {
-        return shape.getPosition().y >= 400 ? true : false;
-    }
 };
 
-// 게임을 실행하는 메인 함수
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Super Mario Jump Simulation"); // 윈도우 생성
     window.setFramerateLimit(60); // 프레임 속도 설정
@@ -129,10 +124,9 @@ int main() {
             }
         }
         else {
-            if(!player.IsBottom())
-                player.is_on_ground = false;
+            // 플랫폼을 떠났을 때 바닥에 있는지 체크
+            player.is_on_ground = player.shape.getPosition().y >= 400; // 400은 바닥 Y좌표
         }
-        
 
         // Y좌표 텍스트 업데이트
         y_text.setString("Y: " + std::to_string(static_cast<int>(player.shape.getPosition().y)));
