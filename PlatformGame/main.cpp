@@ -4,6 +4,13 @@
 #include <sstream> // 필요 라이브러리 추가
 #include <iomanip> // 필요 라이브러리 추가
 
+// 상수 정의
+const float kGroundY = 400.0f; // 바닥의 Y 좌표
+const float kPlatformY = 350.0f; // 플랫폼의 Y 좌표
+const float kJumpHeight = 10.0f; // 점프 높이
+const float kGravity = 0.5f; // 중력의 값
+const float kPlayerSpeed = 5.0f; // 플레이어 이동 속도
+
 // 게임의 플레이어를 나타내는 클래스
 class Player {
 public:
@@ -19,12 +26,12 @@ public:
     Player() {
         shape.setSize(sf::Vector2f(50, 50)); // 플레이어 크기 설정
         shape.setFillColor(sf::Color::Green); // 플레이어 색상 설정
-        shape.setPosition(100, 400); // 초기 위치 설정
-        speed = 5.0f; // 이동 속도 초기화
+        shape.setPosition(100, kGroundY); // 초기 위치 설정
+        speed = kPlayerSpeed; // 이동 속도 초기화
         is_jumping = false; // 점프 상태 초기화
         is_on_ground = true; // 초기에는 바닥에 있다고 가정
-        jump_height = 10.0f; // 점프 높이 설정
-        gravity = 0.5f; // 중력 설정
+        jump_height = kJumpHeight; // 점프 높이 설정
+        gravity = kGravity; // 중력 설정
         velocity_y = 0.0f; // Y축 속도 초기화
     }
 
@@ -38,8 +45,8 @@ public:
         shape.move(0, velocity_y); // Y축으로 플레이어 이동
 
         // 바닥에 닿았는지 확인
-        if (shape.getPosition().y >= 400) { // 바닥 Y 좌표
-            shape.setPosition(shape.getPosition().x, 400); // Y 위치를 바닥으로 설정
+        if (shape.getPosition().y >= kGroundY) { // 바닥 Y 좌표
+            shape.setPosition(shape.getPosition().x, kGroundY); // Y 위치를 바닥으로 설정
             velocity_y = 0; // Y축 속도 초기화
             is_on_ground = true; // 바닥에 있음
             is_jumping = false; // 점프 상태 재설정
@@ -70,7 +77,7 @@ int main() {
     // 플랫폼 생성
     sf::RectangleShape platform(sf::Vector2f(200, 20));
     platform.setFillColor(sf::Color::Blue); // 플랫폼 색상 설정
-    platform.setPosition(300, 350); // 플랫폼 위치 설정
+    platform.setPosition(300, kPlatformY); // 플랫폼 위치 설정
 
     // 텍스트를 표시할 폰트 로드
     sf::Font font;
@@ -125,7 +132,7 @@ int main() {
         }
         else {
             // 플랫폼을 떠났을 때 바닥에 있는지 체크
-            player.is_on_ground = player.shape.getPosition().y >= 400; // 400은 바닥 Y좌표
+            player.is_on_ground = player.shape.getPosition().y >= kGroundY; // 400은 바닥 Y좌표
         }
 
         // Y좌표 텍스트 업데이트
