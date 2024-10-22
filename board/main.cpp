@@ -10,31 +10,32 @@ struct Post {
     std::wstring content;
     int views;
     std::wstring date;
+    bool is_selected = false;
 };
 
 class BulletinBoard {
 public:
     void addPost(const std::wstring& title, const std::wstring& author, const std::wstring& content, int views, const std::wstring& date) {
-        posts.push_back({ title, author, content, views, date });
+        posts_.push_back({ title, author, content, views, date });
     }
 
-    void drawList(sf::RenderWindow& window, sf::Font& font, size_t& hoveredPostIndex, size_t& selectedPostIndex) const {
+    void drawList(sf::RenderWindow& window, sf::Font& font, size_t& hoveredPostIndex) const {
         drawHeader(window, font);
 
         const int startingY = 50;
         const int lineHeight = 40;
 
-        for (size_t i = 0; i < posts.size(); ++i) {
+        for (size_t i = 0; i < posts_.size(); ++i) {
             float rowY = startingY + i * lineHeight;
-            drawPost(window, font, posts[i], rowY, (selectedPostIndex == i), (hoveredPostIndex == i));
+            drawPost(window, font, posts_[i], rowY, (posts_[i].is_selected), (hoveredPostIndex == i));
             drawRowSeparator(window, rowY + lineHeight - 5);
         }
     }
 
     void drawContent(sf::RenderWindow& window, sf::Font& font, size_t postIndex) const {
-        if (postIndex >= posts.size()) return;
+        if (postIndex >= posts_.size()) return;
 
-        const Post& post = posts[postIndex];
+        const Post& post = posts_[postIndex];
         sf::Text title(post.title, font, 30);
         title.setPosition(50, 50);
         title.setFillColor(sf::Color::Black);
@@ -56,7 +57,8 @@ public:
         window.draw(backButton);
     }
 
-    size_t getPostCount() const { return posts.size(); }
+    void SetSelected(int idx, bool b = true) { posts_[idx].is_selected = b; }
+    size_t getPostCount() const { return posts_.size(); }
 
 private:
     void drawHeader(sf::RenderWindow& window, sf::Font& font) const {
@@ -98,13 +100,13 @@ private:
         window.draw(line);
     }
 
-    void drawPost(sf::RenderWindow& window, sf::Font& font, const Post& post, float y, bool isSelected,
+    void drawPost(sf::RenderWindow& window, sf::Font& font, const Post& post, float y, bool is_selected,
         bool isHovered) const {
         sf::Text title(post.title, font, 20);
         title.setPosition(50, y);
         // 선택된 항목은 빨간색, 호버된 항목은 핑크색, 기본은 파란색
         title.setFillColor(isHovered ? sf::Color(255, 105, 180)
-            : isSelected ? sf::Color::Red : sf::Color::Blue);
+            : is_selected ? sf::Color::Red : sf::Color::Blue);
         window.draw(title);
 
         sf::Text author(post.author, font, 20);
@@ -126,8 +128,8 @@ private:
         drawColumnSeparator(window, 490, y, y + 35);
         drawColumnSeparator(window, 640, y, y + 35);
     }
-
-    std::vector<Post> posts;
+    
+    std::vector<Post> posts_;
 };
 
 int main() {
@@ -204,6 +206,8 @@ int main() {
 
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     if (hoveredPostIndex != std::numeric_limits<size_t>::max()) {
+                        // TODO : 선택한글 정리
+                        board.SetSelected(hoveredPostIndex);
                         selectedPostIndex = hoveredPostIndex;  // 호버된 상태에서 선택된 상태로 전환합니다.
                         viewingContent = true;
                     }
@@ -217,7 +221,7 @@ int main() {
             board.drawContent(window, font, selectedPostIndex);
         }
         else {
-            board.drawList(window, font, hoveredPostIndex, selectedPostIndex);
+            board.drawList(window, font, hoveredPostIndex);
         }
 
         window.display();
