@@ -1,6 +1,8 @@
 ﻿#include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <string>
+#include <sstream> // 필요 라이브러리 추가
+#include <iomanip> // 필요 라이브러리 추가
 
 // 게임의 플레이어를 나타내는 클래스
 class Player {
@@ -26,7 +28,7 @@ public:
 
     // 중력을 기반으로 플레이어의 위치를 업데이트
     void Update() {
-        // 속도를 중력만큼 증가시킴
+        // 중력을 속도에 적용
         if (is_jumping) {
             velocity_y += gravity; // 중력을 속도에 적용
         }
@@ -51,7 +53,7 @@ public:
     void Jump() {
         if (!is_jumping) { // 점프 중이 아닐 때만 점프
             velocity_y = -jump_height; // 점프를 위한 Y축 속도를 설정
-            is_jumping = true; // 점프 상태를 true로 변경
+            is_jumping = true; // 점프 상태 설정
         }
     }
 };
@@ -80,6 +82,7 @@ int main() {
     y_text.setCharacterSize(24); // 글자 크기 설정
     y_text.setFillColor(sf::Color::White); // 글자 색상 설정
 
+    // Y축 속도를 표시할 텍스트 객체 생성
     sf::Text vy_text;
     vy_text.setPosition(0.f, 24.f);
     vy_text.setFont(font); // 텍스트에 폰트 설정
@@ -117,7 +120,11 @@ int main() {
 
         // Y좌표 텍스트 업데이트
         y_text.setString("Y: " + std::to_string(static_cast<int>(player.shape.getPosition().y)));
-        vy_text.setString("vY: " + std::to_string(static_cast<int>(player.velocity_y)));
+
+        // Y 속도를 소수점 둘째 자리까지 형식화하여 텍스트에 설정
+        std::ostringstream oss; // 텍스트 스트림 생성
+        oss << std::fixed << std::setprecision(2) << player.velocity_y; // 소수점 둘째 자리까지 설정
+        vy_text.setString("vY: " + oss.str()); // 형식화된 문자열을 텍스트에 설정
 
         // 윈도우를 지우고 게임 객체를 그리기
         window.clear();
