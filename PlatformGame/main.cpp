@@ -4,6 +4,7 @@
 #include <sstream> // 필요 라이브러리 추가
 #include <iomanip> // 필요 라이브러리 추가
 #include "Player.h" // Player 헤더 파일 포함
+#include "Platform.h" // Platform 헤더 파일 포함
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Super Mario Jump Simulation"); // 윈도우 생성
@@ -11,10 +12,10 @@ int main() {
 
     Player player; // 플레이어 객체 생성
 
-    // 플랫폼 생성
-    sf::RectangleShape platform(sf::Vector2f(200, 20));
-    platform.setFillColor(sf::Color::Blue); // 플랫폼 색상 설정
-    platform.setPosition(300, 350); // 플랫폼 위치 설정
+    // 플랫폼 객체들을 생성
+    Platform platform1(200, 20, sf::Color::Blue, 300, 350); // 첫 번째 플랫폼 생성
+    Platform platform2(150, 20, sf::Color::Red, 500, 350 - 50); // 두 번째 플랫폼 생성
+    Platform platform3(250, 20, sf::Color::Yellow, 100, 350 - 100); // 세 번째 플랫폼 생성
 
     // 텍스트를 표시할 폰트 로드
     sf::Font font;
@@ -58,11 +59,22 @@ int main() {
         // 플레이어 상태 업데이트
         player.Update();
 
-        // 플랫폼과의 충돌 확인
-        if (player.getShape().getGlobalBounds().intersects(platform.getGlobalBounds())) {
+        // 각각의 플랫폼과의 충돌 확인
+        if (player.getShape().getGlobalBounds().intersects(platform1.getShape().getGlobalBounds()) ||
+            player.getShape().getGlobalBounds().intersects(platform2.getShape().getGlobalBounds()) ||
+            player.getShape().getGlobalBounds().intersects(platform3.getShape().getGlobalBounds())) {
+
             // 플랫폼 위에 있을 때만 떨어지도록
             if (player.getVelocityY() > 0) { // 아래로 떨어질 때만
-                player.getShape().setPosition(player.getShape().getPosition().x, platform.getPosition().y - player.getShape().getSize().y);
+                if (player.getShape().getGlobalBounds().intersects(platform1.getShape().getGlobalBounds())) {
+                    player.getShape().setPosition(player.getShape().getPosition().x, platform1.getShape().getPosition().y - player.getShape().getSize().y);
+                }
+                else if (player.getShape().getGlobalBounds().intersects(platform2.getShape().getGlobalBounds())) {
+                    player.getShape().setPosition(player.getShape().getPosition().x, platform2.getShape().getPosition().y - player.getShape().getSize().y);
+                }
+                else if (player.getShape().getGlobalBounds().intersects(platform3.getShape().getGlobalBounds())) {
+                    player.getShape().setPosition(player.getShape().getPosition().x, platform3.getShape().getPosition().y - player.getShape().getSize().y);
+                }
                 player.setVelocityY(0); // Y축 속도 초기화
                 player.setOnGround(true); // 플레이어가 플랫폼 위에 있음을 설정
             }
@@ -82,7 +94,9 @@ int main() {
 
         // 윈도우를 지우고 게임 객체를 그리기
         window.clear();
-        window.draw(platform); // 플랫폼 그리기
+        window.draw(platform1.getShape()); // 첫 번째 플랫폼 그리기
+        window.draw(platform2.getShape()); // 두 번째 플랫폼 그리기
+        window.draw(platform3.getShape()); // 세 번째 플랫폼 그리기
         window.draw(player.getShape()); // 플레이어 그리기
         window.draw(y_text); // Y 좌표 텍스트 그리기
         window.draw(vy_text); // Y 속도 텍스트 그리기
