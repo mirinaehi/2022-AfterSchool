@@ -7,9 +7,11 @@
 #include "Player.h" // Player 헤더 파일 포함
 #include "Platform.h" // Platform 헤더 파일 포함
 
+const int kWidth = 800;
+const int kHeight = 600;
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Super Mario Jump Simulation"); // 윈도우 생성
+    sf::RenderWindow window(sf::VideoMode(kWidth, kHeight), "Super Mario Jump Simulation"); // 윈도우 생성
     window.setFramerateLimit(60); // 프레임 속도 설정
 
     Player player; // 플레이어 객체 생성
@@ -34,14 +36,13 @@ int main() {
 
     // Y축 속도를 표시할 텍스트 객체 생성
     sf::Text iog_text;
-    iog_text.setPosition(0.f, 24.f);
     iog_text.setFont(font); // 텍스트에 폰트 설정
     iog_text.setCharacterSize(24); // 글자 크기 설정
     iog_text.setFillColor(sf::Color::White); // 글자 색상 설정
 
     // 카메라 뷰 생성 및 설정
     sf::View camera = window.getDefaultView(); // 기본 뷰 가져오기
-    camera.setSize(800, 600); // 뷰의 크기 설정
+    camera.setSize(kWidth, kHeight); // 뷰의 크기 설정
 
     // 메인 게임 루프
     while (window.isOpen()) {
@@ -91,12 +92,15 @@ int main() {
 
         // Y좌표 텍스트 업데이트
         y_text.setString("Y: " + std::to_string(static_cast<int>(player.getPositionY())));
+        y_text.setPosition(camera.getCenter().x - kWidth / 2 + 0.f, camera.getCenter().y - kHeight / 2 + 0.f);
 
 
         // Y 속도를 소수점 둘째 자리까지 형식화하여 텍스트에 설정
         std::ostringstream oss; // 텍스트 스트림 생성
         oss << std::fixed << std::setprecision(2) << player.isOnGround(); // 소수점 둘째 자리까지 설정
         iog_text.setString("is_on_ground: " + oss.str()); // 형식화된 문자열을 텍스트에 설정
+        iog_text.setPosition(camera.getCenter().x-kWidth/2 + 0.f, camera.getCenter().y-kHeight/2+24.f);
+
 
         // 윈도우를 지우고 게임 객체를 그리기
         window.clear();
