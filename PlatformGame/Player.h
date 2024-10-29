@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 // 상수 정의
-const float kGroundY = 400.0f; // 바닥의 Y 좌표
+const float kGroundY = 500.0f; // 바닥의 Y 좌표
 const float kJumpHeight = 10.0f; // 점프 높이
 const float kGravity = 0.5f; // 중력의 값
 const float kPlayerSpeed = 5.0f; // 플레이어 이동 속도
