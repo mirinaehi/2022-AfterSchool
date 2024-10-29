@@ -39,6 +39,10 @@ int main() {
     iog_text.setCharacterSize(24); // 글자 크기 설정
     iog_text.setFillColor(sf::Color::White); // 글자 색상 설정
 
+    // 카메라 뷰 생성 및 설정
+    sf::View camera = window.getDefaultView(); // 기본 뷰 가져오기
+    camera.setSize(800, 600); // 뷰의 크기 설정
+
     // 메인 게임 루프
     while (window.isOpen()) {
         sf::Event event;
@@ -79,8 +83,15 @@ int main() {
             }
         }
 
+        // 카메라 위치 업데이트 (플레이어를 따라 이동)
+        camera.setCenter(player.getShape().getPosition().x + player.getShape().getSize().x / 2,
+            player.getShape().getPosition().y + player.getShape().getSize().y / 2); // 카메라 중앙을 플레이어 위치로 조정
+
+        window.setView(camera); // 카메라 뷰 설정
+
         // Y좌표 텍스트 업데이트
         y_text.setString("Y: " + std::to_string(static_cast<int>(player.getPositionY())));
+
 
         // Y 속도를 소수점 둘째 자리까지 형식화하여 텍스트에 설정
         std::ostringstream oss; // 텍스트 스트림 생성
