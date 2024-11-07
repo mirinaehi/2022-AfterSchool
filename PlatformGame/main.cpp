@@ -25,9 +25,9 @@ int main() {
     platforms.emplace_back(300, 20, sf::Color::Red, 900, 150); // 다섯 번째 플랫폼
     platforms.emplace_back(180, 20, sf::Color::Yellow, 1200, 400); // 여섯 번째 플랫폼
     platforms.emplace_back(400, 20, sf::Color::Blue, 1500, 420); // 일곱 번째 플랫폼
-    platforms.emplace_back(320, 20, sf::Color::Red, 1800, 600); // 여덟 번째 플랫폼
+    platforms.emplace_back(320, 20, sf::Color::Red, 1800, 500); // 여덟 번째 플랫폼
     platforms.emplace_back(840, 20, sf::Color::Yellow, 2020, 470); // 아홉 번째 플랫폼
-    platforms.emplace_back(500, 20, sf::Color::Blue, 800, 640); // 마지막 플랫폼
+    platforms.emplace_back(500, 20, sf::Color::Blue, 800, 540); // 마지막 플랫폼
 
     // 텍스트를 표시할 폰트 로드
     sf::Font font;
