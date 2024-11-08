@@ -6,6 +6,7 @@
 #include <vector> // 벡터 라이브러리 추가
 #include "Player.h" // Player 헤더 파일 포함
 #include "Platform.h" // Platform 헤더 파일 포함
+#include "World.h"
 
 // TODO : 뷰에대한 파일분할
 
@@ -84,7 +85,7 @@ int main() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             player.Move(1); // 오른쪽으로 이동
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             player.Jump(); // 점프
         }
 
@@ -151,7 +152,7 @@ int main() {
         window.draw(iog_text); // Y 속도 텍스트 그리기
         window.draw(miniMap);
 
-        //  TODO : 리팩토링
+        // TODO : 리팩토링 + 맨 오른쪽 노란색 플랫폼이 오른쪽 가장자리 부분이 미니맵과 매칭이 안됨
         // 플랫폼 및 플레이어를 미니맵에 그리기
         for (Platform& platform : platforms) {
             sf::RectangleShape miniPlatform = platform.getShape();

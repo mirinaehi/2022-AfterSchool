@@ -2,11 +2,11 @@
 #define PLAYER_H
 
 #include <SFML/Graphics.hpp>
+#include <stack>
+#include "Missile.h"
 
 // 상수 정의
-const float kGroundY = 550.0f; // 바닥의 Y 좌표
 const float kJumpHeight = 10.0f; // 점프 높이
-const float kGravity = 0.5f; // 중력의 값
 const float kPlayerSpeed = 5.0f; // 플레이어 이동 속도
 
 // 게임의 플레이어를 나타내는 클래스
@@ -19,6 +19,7 @@ private:
     float jump_height_;        // 점프 높이
     float gravity_;            // 중력의 힘
     float velocity_y_;         // Y축 속도
+    
 
 public:
     // 생성자

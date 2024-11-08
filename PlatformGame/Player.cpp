@@ -1,4 +1,5 @@
 ﻿#include "Player.h"
+#include "World.h"
 
 // 생성자
 Player::Player() {
